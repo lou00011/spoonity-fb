@@ -21,4 +21,4 @@ yarn-error.log*
 *.sw?
 
 # private files
-src/logic/firebaseConfig.js
+src/logic/secrets.js
