@@ -1,10 +1,19 @@
 import { isEmailPresent } from './firebaseUtils'
 
-
 // custom validators for vuelidate
+
+// https://vuelidate.netlify.com/#sub-collections-validation
+// tldr: async validation require passing of a promise
+// valid promise -> passing validation
+// failed promise -> failed validation
 function noEmailDuplicate (value) {
-  return isEmailPresent()
-  //todo async validation
+  return isEmailPresent.then(x => {
+    if (x) {
+      return x
+    }else{
+      throw new Error()
+    }
+  }
 }
 
 function isValidPhoneNumber (value) {

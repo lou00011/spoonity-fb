@@ -49,7 +49,7 @@
       </vs-input>
       
      <vs-button
-     @click="register"
+     @click.prevent="register"
      >
      Register
      </vs-button>
@@ -83,7 +83,6 @@ export default {
   },
   methods:{
     register: function(e){
-      e.preventDefault()
       isEmailPresent(this.store.email)
          .then(v => { v ? alert("email already exist") : register(this.store)})
     }

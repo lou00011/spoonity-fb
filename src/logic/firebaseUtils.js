@@ -21,6 +21,7 @@ function pushAdditionalRegInfo(userid, firstName, lastName, phoneNumber) {
   })
 }
 
+// fetchSignInMethodForEmail return list of sign-in method for the email. If the list is of 0 length then the email is not present in the system
 export function isEmailPresent(email) {
   return auth.fetchSignInMethodsForEmail(email).then(v => { return v.length !== 0 })
 }
