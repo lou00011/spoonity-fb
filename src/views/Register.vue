@@ -1,100 +1,159 @@
 <template>
-    <form>
-      <vs-input
-      type="email"
-      v-model.lazy="store.email"
-      placeholder="email" 
-      icon-after="false"
-      >
-      </vs-input>
+<form>
 
-      <vs-input
-      type='password'
-      v-model="store.password"
-      placeholder="password" 
-      icon-after="false"
-      >
-      </vs-input>
+  <reginput
+  label="Email"
+  :type="'text'"
+  :validators="validators.email"
+  :dangerTexts="dangerTexts"
+  @return="getDataFromChild('email',$event)"
+  >
+  </reginput>
 
-      <vs-input
-      type='password'
-      v-model="store.passwordConfirm"
-      placeholder="Confirm password" 
-      icon-after="false"
-      >
-      </vs-input>
+  <reginput
+  label="Password"
+  :type="'password'"
+  :validators="validators.password"
+  :dangerTexts="dangerTexts"
+  @return="getDataFromChild('password',$event)"
+  >
+  </reginput>
 
-      <vs-input
-      type="text"
-      v-model.trim="store.firstName"
-      placeholder="first name" 
-      icon-after="false"
-      >
-      </vs-input>
+  <reginput
+  label="Confirm Password"
+  :type="'password'"
+  :validators="validators.rePassword"
+  :dangerTexts="dangerTexts"
+  @return="getDataFromChild('rePassword',$event)"
+  >
+  </reginput>
 
-      <vs-input
-      type="text"
-      v-model.trim="store.lastName"
-      placeholder="last name" 
-      icon-after="false"
-      >
-      </vs-input>
-    
-      <vs-input
-      type="text"
-      v-model.trim="store.phoneNumber"
-      placeholder="phone number" 
-      icon-after="false"
-      >
-      </vs-input>
-      
-     <vs-button
-     @click.prevent="register"
-     >
-     Register
-     </vs-button>
+  <reginput
+  label="First Name"
+  :type="'text'"
+  :validators="validators.firstName"
+  :dangerTexts="dangerTexts"
+  @return="getDataFromChild('firstName',$event)"
+  >
+  </reginput>
 
-    </form>
+  <reginput
+  label="Last Name"
+  :type="'text'"
+  :validators="validators.lastName"
+  :dangerTexts="dangerTexts"
+  @return="getDataFromChild('lastName',$event)"
+  >
+  </reginput>
+
+  <reginput
+  label="Phone Number"
+  :type="'text'"
+  :validators="validators.phoneNumber"
+  :dangerTexts="dangerTexts"
+  @return="getDataFromChild('phoneNumber',$event)"
+  >
+  </reginput>
+
+  <vs-button
+  type="border"
+  :disabled="!isFormSubmittable"
+  @click.prevent="() => { cleanAll(); registerToFB(); redirect() }"
+  >register</vs-button>
+  </form>
 </template>
 
 <script>
-import { required, minLength, email, alpha, sameAs } from 'vuelidate/lib/validators'
-import { register, isEmailPresent } from '../logic/firebaseUtils'
-
-const noEmailDuplicate = (value) => !isEmailPresent(value)
-const isvalidPhoneNumber = (value) => {}
+import RegistrationInput from '../components/RegistrationInput'
+import { required, minLength, email, alpha } from 'vuelidate/lib/validators'
+import { noEmailDuplicate, isValidPhoneNumber, cleanPhoneNumber } from '../logic/utils'
+import { register } from '../logic/firebaseUtils'
+import { router } from '../router'
 
 export default {
-  name: 'register',
-  data: function(){
+  components: {
+    reginput: RegistrationInput
+  },
+  data: function () {
     return {
-      state:{
-
+      // These values are used to seed individual input components
+      validators: {
+        email: { required, email, noEmailDuplicate: noEmailDuplicate },
+        password: { required, passwordMinLength: minLength(6) },
+        rePassword: { required, confirmPassword: this.confirmPassword },
+        firstName: { required, alpha },
+        lastName: { required, alpha },
+        phoneNumber: { required, isValidPhoneNumber: isValidPhoneNumber }
       },
-      store:{
-        email:'',
-        password: '',
-        passwordConfirm: '',
-        firstName: '',
-        lastNAme: '',
-        phoneNumber: '',
+      dangerTexts: {
+        required: 'This field is required',
+        email: 'Email is not valid',
+        alpha: 'Only alphabetic characters are allowed',
+        noEmailDuplicate: 'Email already exists',
+        passwordMinLength: 'Password too short',
+        confirmPassword: 'The passwords entered do not match',
+        isValidPhoneNumber: 'Not a valid phone number'
+      },
+
+      // These fields are used to store value that are potentially propagated elsewhere
+      store: {
+        // Note that true = existence of error
+        errors: {
+          email: true,
+          password: true,
+          rePassword: true,
+          firstName: true,
+          lastName: true,
+          phoneNumber: true
+        },
+        values: {
+          email: '',
+          password: '',
+          rePassword: '',
+          firstName: '',
+          lastName: '',
+          phoneNumber: ''
+        }
       }
     }
   },
-  methods:{
-    register: function(e){
-      isEmailPresent(this.store.email)
-         .then(v => { v ? alert("email already exist") : register(this.store)})
+  methods: {
+    getDataFromChild: function (fieldName, [error, value]) {
+      this.store.errors[fieldName] = error
+      this.store.values[fieldName] = value
+    },
+    confirmPassword: function (value) {
+      return this.store.values.password === value
+    },
+    // field cleaning functions
+    cleanAll: function () {
+      const trimAndCapFirst = (str) => {
+        let s = str.trim()
+        return s.charAt(0).toUpperCase() + s.slice(1)
+      }
+
+      this.store.values.firstName = trimAndCapFirst(this.store.values.firstName)
+      this.store.values.lastName = trimAndCapFirst(this.store.values.lastName)
+      this.store.values.phoneNumber = cleanPhoneNumber(this.store.values.phoneNumber)
+    },
+    registerToFB: function () {
+      const { rePassword, ...rest } = this.store.values
+      register(rest)
+    },
+    redirect: function () {
+      router.push('home')
     }
   },
-  validations: {
-    store:{
-      email: { required, email, noEmailDuplicate },
-      password: { minLength: minLength(6) },
-      passwordConfirm: { sameAs: sameAs(this.store.password) },
-      firstName: { alpha },
-      lastName: { alpha },
-      phoneNumber: { number }, 
+  computed: {
+    isFormErrorFree: function () {
+      return Object.values(this.store.errors).filter(x => x === true).length === 0
+    },
+    isFormFilled: function () {
+      return Object.values(this.store.values).filter(x => x === '').length === 0
+    },
+    isFormSubmittable: function () {
+      // return this.isFormErrorFree && this.isFormFilled
+      return this.isFormErrorFree && this.isFormFilled
     }
   }
 }
