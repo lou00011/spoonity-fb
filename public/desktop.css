@@ -16,7 +16,7 @@
       "footer footer footer";
   }
 
-  #loginform, #registrationform{
+  #loginform {
     display: flex; 
     flex-direction: column;
 
@@ -27,5 +27,13 @@
     position: relative;
     top: 40%;
     transform: translateY(-50%);
+  }
+
+  #registrationform {
+    display: flex; 
+    flex-direction: column;
+
+    width: 200px;
+    margin: auto;
   }
 }

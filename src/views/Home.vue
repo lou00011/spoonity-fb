@@ -27,21 +27,21 @@ export default {
   },
   data: function () {
     return {
-      entries: undefined 
+      entries: undefined
     }
   },
   methods: {
     reRender: async function () {
-      console.log("Data refreshed")
+      console.log('Data refreshed')
       const v = await getCurrentUserDiaries()
-      if (v !== undefined){
+      if (v !== undefined) {
         this.entries = v
       }
     }
   },
   created: async function () {
     const v = await getCurrentUserDiaries()
-    if (v !== undefined){
+    if (v !== undefined) {
       this.entries = v
     }
   }

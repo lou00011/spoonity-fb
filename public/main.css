@@ -1,7 +1,10 @@
 @import './mobile.css';
 @import './desktop.css';
 
-:root {
+* {
+ font-family: 'Open Sans', sans-serif;
+}
+html {
   width: 100vw;
   height: 100vh;
   
@@ -10,11 +13,6 @@
 --color-3: #3b3a3d;
 --color-4: #7c8ba3;
 --color-5: #baccd2;
-}
-
-html {
-  width: inherit;
-  height: inherit;
 }
 
 body {

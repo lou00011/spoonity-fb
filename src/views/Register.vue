@@ -1,6 +1,6 @@
 <template>
 <div>
-<form id="registrationform"> 
+<form id="registrationform">
 
   <reginput
   class="registrationform-child"
@@ -66,7 +66,12 @@
   class="registrationform-child"
   type="border"
   :disabled="!isFormSubmittable"
-  @click.prevent="() => { cleanAll(); registerToFB(); redirect() }"
+  @click.prevent="() => { 
+    cleanAll()
+    registerToFB()
+    redirect()
+    changeNavLinkState(0) // Because it redirect to login
+    }"
   >register</vs-button>
   </form>
   </div>
@@ -77,6 +82,7 @@ import RegistrationInput from '../components/RegistrationInput'
 import { required, minLength, email, alpha } from 'vuelidate/lib/validators'
 import { noEmailDuplicate, isValidPhoneNumber, cleanPhoneNumber } from '../logic/utils'
 import { register } from '../logic/firebaseUtils'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Register',
@@ -151,7 +157,10 @@ export default {
     },
     redirect: function () {
       this.$router.push('/')
-    }
+    },
+    ...mapActions([
+      'changeNavLinkState'
+    ])
   },
   computed: {
     isFormErrorFree: function () {

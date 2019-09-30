@@ -74,7 +74,7 @@ export default {
   data: function () {
     return {
       weathercond: '',
-      userName: ''
+      userName: 'Guest'
     }
   },
   methods: {
@@ -96,7 +96,7 @@ export default {
     ])
   },
   watch: {
-    authenticationStatus: async function(newValue, oldValue){
+    authenticationStatus: async function (newValue, oldValue) {
       const info = await getCurrentUserInfo()
       this.userName = this.authenticationStatus ? info.firstName : 'Guest'
     }

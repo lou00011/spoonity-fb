@@ -34,6 +34,32 @@ index.html -> main.js -> App.vue -> "views"
 
 `App.vue` is injected into a `<div id='app'>` element inside `index.html`. `main.js` serves as the initialization file for Vue and controls this injection. Depending on user input each file in `views` is rendered inside a `<div>` in `App.vue`. `route.js` defines routes connecting `views` together as well as routing behavior such as redirection for unauthorized users. `store.js` is used to store app level states that are shared across individual views, maintaining consistency across navigation.
 
+
+## Deployment
+
+1. Add `secrets.js` file into `logic` folder which includes your Firebase key and OpenWeather API key.
+
+The file should be structured as such:
+
+```
+export function firebaseKey(){
+  // YOUR KEY HERE
+}
+
+export function openWeatherKey(){
+  // YOUR KEY HERE
+}
+```
+2. `npm install` or `yarn install` all required packages
+
+3. `firebase login`
+
+4. `firebase init`, choose `firestore` and `hosting`. Associate deployment folder to `dist`
+
+5. `npm run build` or `yarn run build`, which should populate `dist` folder
+
+6. `firebase deploy`
+
 ## Project setup
 ```
 yarn install

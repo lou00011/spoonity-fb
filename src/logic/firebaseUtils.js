@@ -18,16 +18,16 @@ an object o with the following structure:
 @return: Promise<UserCredential>
 */
 
-export function register(o) {
+export function register (o) {
   createAccount(o.email, o.password)
     .then(userCredential => pushAdditionalRegInfo(userCredential.user.uid, o.firstName, o.lastName, o.phoneNumber))
 }
 
-function createAccount(email, password) {
+function createAccount (email, password) {
   return auth.createUserWithEmailAndPassword(email, password)
 }
 
-function pushAdditionalRegInfo(userid, firstName, lastName, phoneNumber) {
+function pushAdditionalRegInfo (userid, firstName, lastName, phoneNumber) {
   const document = dbUsers.doc(userid)
   document.set({
     'firstName': firstName,
@@ -42,7 +42,7 @@ function pushAdditionalRegInfo(userid, firstName, lastName, phoneNumber) {
   @return: Promise<Boolean>, with true = email exists
 */
 
-export function isEmailPresent(email) {
+export function isEmailPresent (email) {
   return auth.fetchSignInMethodsForEmail(email).then(v => { return v.length !== 0 })
 }
 
@@ -51,7 +51,7 @@ export function isEmailPresent(email) {
  * @param: none
  * @return: boolean with false denoting unauthenticated session
  */
-export function isSessionAuthenticated() {
+export function isSessionAuthenticated () {
   return auth.currentUser !== null
 }
 
@@ -60,7 +60,7 @@ export function isSessionAuthenticated() {
   @param: (String, String)
   @return: Promise<T>, where T = UserCredential | ErrorObject containing errorCode and errorMsg property
 */
-export function login(email, password) {
+export function login (email, password) {
   return auth.signInWithEmailAndPassword(email, password).catch(
     function (error) {
       return {
@@ -76,7 +76,7 @@ export function login(email, password) {
   @param:  Callback function, typically this is a redirection to homepage
   @return: void | Promise<T>, where T = ErrorObject containing ErrorCode and errorMsg property
 */
-export function signout() {
+export function signout () {
   return auth.signOut().catch(function (error) {
     return {
       errorCode: error.code,
@@ -95,7 +95,7 @@ export function signout() {
  * }
  * on failure, all fields of the above structure contain null
  */
-export async function getCurrentUserInfo() {
+export async function getCurrentUserInfo () {
   const currentUser = auth.currentUser
   if (currentUser) {
     let a = await getUserInfoFromDB(currentUser.uid)
@@ -112,18 +112,18 @@ export async function getCurrentUserInfo() {
   return null
 }
 
-export function updateCurrentUserInfo(o) {
+export function updateCurrentUserInfo (o) {
   const userid = auth.currentUser.uid
   pushAdditionalRegInfo(userid, o.firstName, o.lastName, cleanPhoneNumber(o.phoneNumber))
   console.log('Updated user info')
 }
 
-function getUserInfoFromDB(userid) {
+function getUserInfoFromDB (userid) {
   return dbUsers.doc(userid)
 }
 
 // Diary functions
-export function addUserDiaryEntry(title, text) {
+export function addUserDiaryEntry (title, text) {
   const userid = auth.currentUser.uid
   console.log(`${title}, ${text}`)
   console.log(userid)
@@ -140,7 +140,7 @@ export function addUserDiaryEntry(title, text) {
     .then(() => console.log('entry added'))
 }
 
-export function deleteUserDiaryEntry(entryid) {
+export function deleteUserDiaryEntry (entryid) {
   const userid = auth.currentUser.uid
   dbDiaries.doc(userid)
     .collection('entries')
@@ -149,7 +149,7 @@ export function deleteUserDiaryEntry(entryid) {
     .then(() => console.log('entry deleted'))
 }
 
-export async function getCurrentUserDiaries() {
+export async function getCurrentUserDiaries () {
   const userid = auth.currentUser.uid
   // console.log(dbDiaries.doc(userid).collection('entries').get())
   const snapshot = await dbDiaries.doc(userid)
