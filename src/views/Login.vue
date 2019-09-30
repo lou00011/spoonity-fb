@@ -1,20 +1,15 @@
 <template>
-  <div>
-    HELLO
-  </div>
+<div>
+<loginform id="loginform"></loginform>
+</div>
 </template>
 
 <script>
+import Login from '../components/LoginForm'
 export default {
   name: 'login',
-  data: function(){
-    return {
-
-    }
-  },
+  components: {
+    loginform: Login
+  }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -1,18 +1,49 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+<div>
+  <diaryentry
+  id="diaryentry"
+  @return="reRender()"
+  >
+  </diaryentry>
+
+  <diarylist
+  id="diarylist"
+  :entries="entries"
+  @return="reRender()"
+  >
+  </diarylist>
+</div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import DiaryList from '../components/DiaryList'
+import DiaryEntry from '../components/DiaryEntry'
+import { getCurrentUserDiaries } from '../logic/firebaseUtils'
 export default {
-  name: 'home',
+  name: 'Home',
   components: {
-    HelloWorld
+    diarylist: DiaryList,
+    diaryentry: DiaryEntry
+  },
+  data: function () {
+    return {
+      entries: undefined 
+    }
+  },
+  methods: {
+    reRender: async function () {
+      console.log("Data refreshed")
+      const v = await getCurrentUserDiaries()
+      if (v !== undefined){
+        this.entries = v
+      }
+    }
+  },
+  created: async function () {
+    const v = await getCurrentUserDiaries()
+    if (v !== undefined){
+      this.entries = v
+    }
   }
 }
 </script>

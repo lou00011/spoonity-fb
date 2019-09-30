@@ -13,10 +13,12 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "firebase": "^6.6.2",
+    "machina": "^4.0.2",
     "ramda": "^0.26.1",
     "storybook": "^5.1.11",
     "urijs": "^1.19.1",
     "vue": "^2.6.10",
+    "vue-async-computed": "^3.7.0",
     "vue-router": "^3.0.3",
     "vuelidate": "^0.7.4",
     "vuesax": "^3.10.4",

@@ -1,0 +1,69 @@
+@import './mobile.css';
+@import './desktop.css';
+
+:root {
+  width: 100vw;
+  height: 100vh;
+  
+--color-1: #d2c6b6;
+--color-2: #726c68;
+--color-3: #3b3a3d;
+--color-4: #7c8ba3;
+--color-5: #baccd2;
+}
+
+html {
+  width: inherit;
+  height: inherit;
+}
+
+body {
+  width: inherit;
+  height: inherit;
+}
+
+/* App Elements */
+#headr{ 
+  grid-area:header;
+  background: var(--color-4);
+}
+#footr{ 
+  grid-area:footer;
+  background: var(--color-4);
+}
+#navigation{ 
+  grid-area: navigation;
+}
+#sidebar{ 
+  grid-area:sidebar;
+  background: var(--color-5);
+}
+#content{
+  grid-area:content;
+}
+
+/* Login Form Elements */
+.loginform-child {
+  margin-bottom: 20px;
+}
+
+/* Registration Form Elements */
+.registrationform-child {
+  margin-bottom: 15px;
+}
+
+/* Diary Entry Elements */
+
+#diaryentry-title{
+  grid-area: title;
+}
+
+#diaryentry-text{
+  grid-area: text;
+}
+
+#diaryentry-button{
+  grid-area: button;
+}
+
+

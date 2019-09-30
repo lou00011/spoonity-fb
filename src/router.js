@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Home from './views/Home'
 import Login from './views/Login.vue'
 import Register from './views/Register.vue'
 import UserDetails from './views/UserDetails.vue'
+//
+import { isSessionAuthenticated } from '../src/logic/firebaseUtils'
 
-Vue.use(Router)
-
-export default new Router({
+export const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -18,7 +18,7 @@ export default new Router({
     },
     {
       path: '/login',
-      name: 'login',
+      name: 'Login',
       component: Login
     },
     {
@@ -28,16 +28,14 @@ export default new Router({
     },
     {
       path: '/userdetails',
-      name: 'user',
+      name: 'User Details',
       component: UserDetails
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     }
   ]
 })
+// Navigation guards. Before each routering check auth status of the session. Redirect to login if session is not authorized
+router.beforeEach((to, from, next) => {
+  isSessionAuthenticated() === false && (to.path !== '/login' && to.path !== '/register') ? next('/login') : next()
+})
+
+Vue.use(Router)

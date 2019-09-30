@@ -1,7 +1,9 @@
 <template>
-<form>
+<div>
+<form id="registrationform"> 
 
   <reginput
+  class="registrationform-child"
   label="Email"
   :type="'text'"
   :validators="validators.email"
@@ -11,6 +13,7 @@
   </reginput>
 
   <reginput
+  class="registrationform-child"
   label="Password"
   :type="'password'"
   :validators="validators.password"
@@ -20,6 +23,7 @@
   </reginput>
 
   <reginput
+  class="registrationform-child"
   label="Confirm Password"
   :type="'password'"
   :validators="validators.rePassword"
@@ -29,6 +33,7 @@
   </reginput>
 
   <reginput
+  class="registrationform-child"
   label="First Name"
   :type="'text'"
   :validators="validators.firstName"
@@ -38,6 +43,7 @@
   </reginput>
 
   <reginput
+  class="registrationform-child"
   label="Last Name"
   :type="'text'"
   :validators="validators.lastName"
@@ -47,6 +53,7 @@
   </reginput>
 
   <reginput
+  class="registrationform-child"
   label="Phone Number"
   :type="'text'"
   :validators="validators.phoneNumber"
@@ -56,11 +63,13 @@
   </reginput>
 
   <vs-button
+  class="registrationform-child"
   type="border"
   :disabled="!isFormSubmittable"
   @click.prevent="() => { cleanAll(); registerToFB(); redirect() }"
   >register</vs-button>
   </form>
+  </div>
 </template>
 
 <script>
@@ -68,9 +77,9 @@ import RegistrationInput from '../components/RegistrationInput'
 import { required, minLength, email, alpha } from 'vuelidate/lib/validators'
 import { noEmailDuplicate, isValidPhoneNumber, cleanPhoneNumber } from '../logic/utils'
 import { register } from '../logic/firebaseUtils'
-import { router } from '../router'
 
 export default {
+  name: 'Register',
   components: {
     reginput: RegistrationInput
   },
@@ -141,7 +150,7 @@ export default {
       register(rest)
     },
     redirect: function () {
-      router.push('home')
+      this.$router.push('/')
     }
   },
   computed: {
@@ -152,13 +161,8 @@ export default {
       return Object.values(this.store.values).filter(x => x === '').length === 0
     },
     isFormSubmittable: function () {
-      // return this.isFormErrorFree && this.isFormFilled
       return this.isFormErrorFree && this.isFormFilled
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -1,31 +1,33 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <headr id="headr"></headr>
+    <footr id="footr"></footr>
+    <navigation
+    id="navigation"
+    @return="redirect($event)"
+    ></navigation>
+    <router-view id="content"></router-view>
+    <sidebar id="sidebar"></sidebar>
+
   </div>
 </template>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+import Header from '../src/components/Header'
+import Footer from '../src/components/Footer'
+import Navigation from '../src/components/Nav'
+import Sidebar from '../src/components/Sidebar'
+export default {
+  components: {
+    headr: Header,
+    footr: Footer,
+    navigation: Navigation,
+    sidebar: Sidebar
+  },
+  methods: {
+    redirect: function (path) {
+      this.$router.push(path)
+    }
+  }
 }
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+</script>

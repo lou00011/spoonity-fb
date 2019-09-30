@@ -1,0 +1,64 @@
+@import './main.css';
+
+@media only screen and (max-width: 480px){
+  #app{
+    margin: auto;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr ;
+    grid-template-rows: 1fr 1fr 40px 5fr 1fr;
+    grid-template-areas:
+    "header"
+    "sidebar"
+    "navigation"
+    "content"
+    "footer" ;
+  }
+  #loginform {
+    display: flex; 
+    flex-direction: column;
+
+    width: 200px;
+    max-height: 40vh;
+    margin: auto;
+    
+    position: relative;
+    top: 40%;
+    transform: translateY(-50%);
+    
+  }
+
+  #registrationform{
+
+    display: flex; 
+    flex-direction: column;
+
+    width: 200px;
+    height: auto;
+    margin: auto;
+  }
+
+  #diaryentry {
+    width: 90%;
+    height: inherit;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 40px;
+    grid-template-rows: 20px, 1fr;
+    grid-template-areas:
+    "title button"
+    "text text";
+  }
+
+  #diarylist {
+    width: inherit;
+    height: inherit;
+    max-height: 45vh;
+    display: block;
+    flex-direction: column;
+    overflow: scroll;
+  }
+
+
+}

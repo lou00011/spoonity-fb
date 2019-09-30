@@ -14,7 +14,7 @@
     >
       <div slot="title">
         <vs-navbar-title id="navtitle">
-          Hi {{ userName() }}, It is {{ weathercond }} today
+          Hi {{ userName }}, It is {{ weathercond }} today
         </vs-navbar-title>
       </div>
 
@@ -67,41 +67,47 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { signout, isSessionAuthenticated, getCurrentUserInfo } from '../logic/firebaseUtils'
+import { signout, getCurrentUserInfo } from '../logic/firebaseUtils'
 import { getCurrentWeatherEmoji } from '../logic/openWeatherUtils'
 
 export default {
   data: function () {
     return {
       weathercond: '',
+      userName: ''
     }
   },
   methods: {
     signOutx: function () {
-      this.toggleAuthenticationStatus()
+      this.onAuthenticationChange()
       signout()
       this.$router.push('/login')
     },
-    userName: function () {
-      const value = this.authenticationStatus ? getCurrentUserInfo().firstName : 'Guest'
-      return value
-    },
     // Vuex methods
     ...mapActions([
-      'changeNavLinkState', 
-      'toggleAuthenticationStatus'
+      'changeNavLinkState',
+      'onAuthenticationChange'
     ])
   },
-  computed : {
+  computed: {
     ...mapState([
       'navLinkState',
       'authenticationStatus'
-    ]),
+    ])
+  },
+  watch: {
+    authenticationStatus: async function(newValue, oldValue){
+      const info = await getCurrentUserInfo()
+      this.userName = this.authenticationStatus ? info.firstName : 'Guest'
+    }
   },
   created: async function () {
     // get the weather condition from OpenWeather
     const weather = await getCurrentWeatherEmoji()
     this.weathercond = weather
+
+    const info = await getCurrentUserInfo()
+    this.userName = this.authenticationStatus ? info.firstName : 'Guest'
   }
 }
 </script>

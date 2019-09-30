@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-import firebaseKey from './secrets'
+import { firebaseKey } from './secrets'
 
 // Initialize firebase
 firebase.initializeApp(firebaseKey())
