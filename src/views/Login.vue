@@ -1,5 +1,6 @@
 <template>
 <div>
+Login
 <loginform id="loginform"></loginform>
 </div>
 </template>

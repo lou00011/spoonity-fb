@@ -1,5 +1,6 @@
 <template>
 <div>
+  Home
   <diaryentry
   id="diaryentry"
   @return="reRender()"

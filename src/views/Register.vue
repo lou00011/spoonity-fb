@@ -1,7 +1,7 @@
 <template>
 <div>
 <form id="registrationform">
-
+Register
   <reginput
   class="registrationform-child"
   label="Email"
